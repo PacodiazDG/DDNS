@@ -17,7 +17,7 @@ app.get("/nic/update", (req, res) => {
   ) {
     return res.status(403).json({ error: "No credentials not valid!" });
   }
-  if (req.query.myip === Ip) {
+  if (req.query.myip == Ip) {
     return res.status(404).json({ error: "ip already registered" });
   }
   Ip=req.query.myip;
@@ -32,18 +32,13 @@ app.get("/nic/update", (req, res) => {
   child.exec("service squid reload", (error) => {
     if (error) {
       console.log(`error: ${error.message}`);
-      return;
+      return res.status(500).json({ error: "File not Write" });
     }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
   });
   res.send("Ok");
 });
 
 dotenv.config();
 app.listen(3000, () => {
-  console.log(`listening on port ${300}`);
+  console.log(`listening on port ${3000}`);
 });

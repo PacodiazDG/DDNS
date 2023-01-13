@@ -5,6 +5,8 @@ import * as dotenv from "dotenv";
 import * as child from "child_process";
 const app = express();
 
+var Ip;
+
 app.get("/nic/update", (req, res) => {
   if (net.isIP(req.query.myip) != 4) {
     return res.status(400).send({ error: "Ip not valid" });
@@ -15,6 +17,10 @@ app.get("/nic/update", (req, res) => {
   ) {
     return res.status(403).json({ error: "No credentials not valid!" });
   }
+  if (req.query.myip === Ip) {
+    return res.status(404).json({ error: "ip already registered" });
+  }
+  Ip=req.query.myip;
   fs.appendFileSync(
     process.env.File,
     `acl myip src ${req.query.myip}\n`,
